@@ -10,17 +10,17 @@ const client = new MongoClient(mongoURL, {
 let dbConnection;
 
 module.exports = {
-  connectToServer: function (callback) {
-    client.connect(function (err, db) {
-      if (err || !db) {
-        return callback(err);
-      }
-
-      dbConnection = db.db('ejemplo');
-      console.log('Successfully connected to MongoDB.');
-
-      return callback();
-    });
+  connectToServer: async function (callback) {
+    try {
+    await client.connect();
+    dbConnection = client.db('ejemplo');
+    console.log('Successfully connected to MongoDB.');
+    return callback();// si todo salio bien se ejecuta la funcion callback
+  } catch (err) {
+    // si hay un error se ejecuta la funcion callback con el error
+    console.error('Error connecting to MongoDB:', err);
+    return callback(err); 
+} 
   },
 
   getDb: function () {
